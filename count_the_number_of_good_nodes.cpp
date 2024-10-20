@@ -57,23 +57,33 @@ public:
   }
 
   void get_all_children(vector<vector<int>> &edges, int node, vector<int> &children) {
-    int parent = 0;
-    int child = 1; 
+   
       // gets all immediate children
+      vector<int> new_children;
       for (auto edge : edges) {
-        if (edge[parent] == node) {
-          children.push_back(edge[child]);
+        if (edge[0] == node) {
+          // if the current edge has the node number in the parent position, 
+          // save the node value of the child position.
+          new_children.push_back(edge[1]);
         }
       } 
 
-      for(auto child : children)
+      for(auto child : new_children)
       {
-        get_all_children(edges, node, children);
+        children.push_back(child);
+      }
+
+      cout << "found children: " << children.size() << " under node: " << node << endl;
+
+      for(auto immediate_child : new_children)
+      {
+        get_all_children(edges, immediate_child, children);
       }
   }
 
   int countGoodNodes(vector<vector<int>> &edges) {
-    
+
+
     int total_nodes = edges.size() + 1; // there is one more node than edges.
     vector<int> good_nodes;
     for(int node = 0; node < total_nodes; node++)
@@ -82,10 +92,17 @@ public:
         vector<int> grandchildren_counts;
         for(int child : immediate_children)
         {
-            vector<int> all_children;
+            vector<int> all_children = {};
             get_all_children(edges, node, all_children);
             grandchildren_counts.push_back(all_children.size());
         }
+
+        cout << "good nodes: ";
+        for(auto gd : good_nodes)
+        {
+          cout << gd << ",";
+        }
+        cout << endl;
 
         bool is_good = true;
         int first = grandchildren_counts[0];
