@@ -65,7 +65,6 @@ public:
         sort(key.begin(), key.end());
         if(!groups.count(key)){
             groups[key] = {s};
-            //groups[key].push_back(s);
         }
         else{
             groups[key].push_back(s);
